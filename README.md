@@ -12,7 +12,7 @@
 
 ## Introduction
 
-The `Resilix` is a TypeScript implementation of a module that provides resilience features for job processing. It is designed to handle retries, fallback mechanisms, and logging for various job processing scenarios.
+The `Resilix` is a TypeScript implementation of a module that provides resilience features for job processing. It is designed to handle retries, fallback mechanisms, logging for various job processing scenarios and building dashboards with real-time KPIs and information about the call execution. 
 
 In addition, it also includes an observer that collects performance metrics using the API from Node.js, allowing you to monitor the execution of your jobs without impacting performance.
 
