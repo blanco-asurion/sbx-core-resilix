@@ -1,0 +1,44 @@
+{
+  "executionContext": {
+    "system": "sbx",
+    "subsystem": "resilix",
+    "capability": "framework",
+    "resource": "tests"
+  },
+  "bootstrapConfig": {
+    "dbtype": [
+      "oracle"
+    ], 
+    "modules": [
+      "voltage", 
+      "express"
+    ]
+  },
+  "useALS": "true",
+  "apiSsmParameterNames": {
+    "global": [
+      "standardSecureFields",
+      "secureFields",
+      "database.sbv5oracledb.connectString",
+      "database.sbv5oracledb.host",
+      "database.sbv5oracledb.port",
+      "database.sbv5oracledb.user",
+      "database.sbv5oracledb.password",
+      "database.sbv5oracledb.poolMin",
+      "database.sbv5oracledb.poolIncrement",
+      "database.sbv5oracledb.poolMax",
+      "expressserver.protocol",
+      "expressserver.keyFile",
+      "expressserver.certFile",
+      "expressserver.port", 
+      "redis.redisAuth", 
+      "redis.endpoint.host", 
+      "redis.endpoint.port"
+    ],
+    "subsystem": [],
+    "capability": [
+    ],
+    "resource": [
+    ]
+  }
+}
