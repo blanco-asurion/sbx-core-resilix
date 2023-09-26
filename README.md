@@ -1,6 +1,8 @@
 # Asurion SBX Resilix 
 ### (FEATURE CANDIDATE LIBRARY)
 
+![diagram](diagram.jpg)
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
@@ -29,9 +31,9 @@ resilix.execute(job, executable, fallback);
 
 ## API Reference
 
-### `Resilix`
+### Resilix
 
-#### `constructor()`
+#### constructor()
 
 - Creates an instance of the `Resilix` class.
 
