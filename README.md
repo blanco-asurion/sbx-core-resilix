@@ -15,7 +15,7 @@ In addition, it also includes an observer that collects performance metrics usin
 
 ## Usage
 
-```
+```ts
 import { Resilix } from 'sbx-core-resilix';
 const resilix = new Resilix();
 
@@ -34,23 +34,15 @@ resilix.execute(job, executable, fallback);
 
 - Creates an instance of the `Resilix` class.
 
-#### `setExecutionContextServiceEntity(serviceEntity: LogEntryAsurionService)`
-
-- Sets the execution context service entity. (Optional)
-
 #### `async execute(job: ResilixJob, executable: ResilixExecutable, fallback?: ResilixFallback)`
 
 - Executes a job with the provided executable and optional fallback.
-
-#### `injectLogger(core: any)`
-
-- Injects a logger into the core.
 
 ## Examples
 
 Here's an example of how to use the Resilix class in a TypeScript project:
 
-```
+```ts
 const resilix: Resilix = new Resilix();
 
 const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
