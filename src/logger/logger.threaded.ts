@@ -1,4 +1,11 @@
-import { LogEntryBase, LogEntryError, LogEntryExecutionInfo, LogEntryInfo, LogEntryJobProcessingInfo, LogEntryServiceEntity } from '.';
+import {
+  LogEntryBase,
+  LogEntryError,
+  LogEntryExecutionInfo,
+  LogEntryInfo,
+  LogEntryJobProcessingInfo,
+  LogEntryServiceEntity
+} from '.';
 
 const newrelicFormatter = require('@newrelic/winston-enricher');
 const winston = require('winston');
@@ -105,7 +112,7 @@ export class LoggerThreaded {
         container_name: `sbx-${executionContext.subssytem}-${executionContext.capability}-${executionContext.resource}`,
         namespace_name: `${process.env.NODE_ENV}`,
         sbxloggerversion: '5.0',
-        appVersion: packagejson.version        
+        appVersion: packagejson.version
       }
     };
   }
@@ -115,10 +122,9 @@ export class LoggerThreaded {
     this.logger.defaultMeta = {
       ...this.logger.defaultMeta,
       ...executionInfo,
-      ...{
-      }
+      ...{}
     };
-  }  
+  }
 
   appendDefaultMeta(key, value) {
     this.logger.defaultMeta = {
@@ -183,7 +189,6 @@ export class LoggerThreaded {
 
   addContext(message) {
     try {
-
       const info: LogEntryExecutionInfo = {};
 
       if (als.getStore() !== undefined) {
@@ -205,12 +210,7 @@ export class LoggerThreaded {
       info.sessionid = info.sessionid || message.sessionid || '';
       info.sender = info.sender || message.sender || '';
 
-      return Object.assign(
-        {},
-        message,
-        info,
-        this.logger.defaultMeta || {}
-      );
+      return Object.assign({}, message, info, this.logger.defaultMeta || {});
     } catch (err) {
       console.error(err);
     }

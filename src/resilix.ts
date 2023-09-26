@@ -26,8 +26,11 @@ export class Resilix {
     this.logger.setExecutionContext(serviceEntity);
   }
 
-  async execute(job: ResilixJob, executable: ResilixExecutable, fallback?: ResilixFallback) {
-
+  async execute(
+    job: ResilixJob,
+    executable: ResilixExecutable,
+    fallback?: ResilixFallback
+  ) {
     const store = new Map();
     store.set('transactionid', job.getUuid());
     store.set('identity', job.getId());
@@ -50,32 +53,53 @@ export class Resilix {
         transactionid: job.getUuid(),
         sessionid: job.getId(),
         correlationid: '',
-        urlpath: '',
-      });      
-      this.logger.info(new LogEntryJobProcessingStart(`Resilix.execute():start retries: ${job.getRetries()}`));
+        urlpath: ''
+      });
+      this.logger.info(
+        new LogEntryJobProcessingStart(
+          `Resilix.execute():start retries: ${job.getRetries()}`
+        )
+      );
       try {
         const result = await this.metricsObserver.execute(job, executable);
-        this.logger.info(new LogEntryJobProcessingSuccess('Resilix.execute():success'));
+        this.logger.info(
+          new LogEntryJobProcessingSuccess('Resilix.execute():success')
+        );
         job.setResult(result);
       } catch (err: any) {
         if (job.isRetriable()) {
           await this.execute(job, executable, fallback);
         }
 
-        this.logger.info(new LogEntryJobProcessingError('Resilix.execute():error', err));
+        this.logger.info(
+          new LogEntryJobProcessingError('Resilix.execute():error', err)
+        );
         job.setResult('ERROR');
         if (fallback !== undefined) {
-          this.logger.info(new LogEntryJobProcessingStart('Resilix.execute():fallback:start'));
+          this.logger.info(
+            new LogEntryJobProcessingStart('Resilix.execute():fallback:start')
+          );
           try {
             await fallback(job);
-            this.logger.info(new LogEntryJobProcessingSuccess('Resilix.execute():fallback:success'));
+            this.logger.info(
+              new LogEntryJobProcessingSuccess(
+                'Resilix.execute():fallback:success'
+              )
+            );
           } catch (err: any) {
-            this.logger.info(new LogEntryJobProcessingError('Resilix.execute():fallback:error', err));
+            this.logger.info(
+              new LogEntryJobProcessingError(
+                'Resilix.execute():fallback:error',
+                err
+              )
+            );
             job.setResult('ERROR');
           } finally {
-            this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():fallback:end'));
+            this.logger.info(
+              new LogEntryJobProcessingEnd('Resilix.execute():fallback:end')
+            );
           }
-        }        
+        }
       } finally {
         this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():end'));
       }

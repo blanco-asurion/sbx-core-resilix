@@ -14,11 +14,11 @@ describe('Tests', () => {
       system: 'system-test',
       subssytem: 'subsystem-test',
       capability: 'capability-test',
-      resource: 'resource-test', 
+      resource: 'resource-test'
     });
 
     const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
-    
+
     await resilix.execute(job, (job: ResilixJob): Promise<any> => {
       return new Promise((resolve, reject) => {
         try {
@@ -52,17 +52,23 @@ describe('Tests', () => {
     resilix.injectLogger(console);
 
     const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
-    job.setMaxRetries(1)
+    job.setMaxRetries(1);
 
-    await resilix.execute(job, (job: ResilixJob): Promise<any> => {
-      return new Promise((resolve, reject) => {
-        reject('ERROR');
-      });
-    }, (job: ResilixJob): Promise<any> => { return Promise.resolve('FALLBACK OK') });
+    await resilix.execute(
+      job,
+      (job: ResilixJob): Promise<any> => {
+        return new Promise((resolve, reject) => {
+          reject('ERROR');
+        });
+      },
+      (job: ResilixJob): Promise<any> => {
+        return Promise.resolve('FALLBACK OK');
+      }
+    );
 
     expect(job.getResult()).toBe('ERROR');
-    expect(job.getRetries()).toBe(1); 
-  });  
+    expect(job.getRetries()).toBe(1);
+  });
 
   afterAll(async () => {
     await sleep(10000);

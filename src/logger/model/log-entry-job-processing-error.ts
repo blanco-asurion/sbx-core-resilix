@@ -1,14 +1,14 @@
 import { LogEntryError, LogEntryJobProcessingInfo } from '.';
 
-export class LogEntryJobProcessingError extends LogEntryJobProcessingInfo implements LogEntryError {
+export class LogEntryJobProcessingError
+  extends LogEntryJobProcessingInfo
+  implements LogEntryError
+{
   constructor(
-    public readonly message: string, 
+    public readonly message: string,
     public readonly error: Error
   ) {
-    super(
-      message,
-      'ERROR'
-    );
+    super(message, 'ERROR');
 
     this.error = error;
   }
