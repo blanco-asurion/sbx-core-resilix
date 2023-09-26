@@ -16,7 +16,7 @@ In addition, it also includes an observer that collects performance metrics usin
 
 ## Usage
 
-```ts
+```typescript
 import { Resilix } from 'sbx-core-resilix';
 const resilix = new Resilix();
 
@@ -39,11 +39,23 @@ resilix.execute(job, executable, fallback);
 
 - Executes a job with the provided executable and optional fallback.
 
+### `ResilixExecutable`
+
+#### `interface ResilixExecutable`
+
+- An interface for defining an executable function to process jobs.
+- Accepts a `ResilixJob` parameter and returns a `Promise<any>`.
+### `ResilixFallback`
+#### `interface ResilixFallback`
+
+- An interface for defining a fallback function to handle errors during job processing.
+- Accepts a `ResilixJob` parameter and returns a `Promise<any>`
+
 ## Examples
 
 Here's an example of how to use the Resilix class in a TypeScript project:
 
-```ts
+```typescript
 const resilix: Resilix = new Resilix();
 
 const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
