@@ -13,6 +13,7 @@ import { ResilixExecutable } from './resilix-executable';
 import { ResilixFallback } from './resilix-fallback';
 import { ResilixJob } from './resilix-job';
 import { als } from '@sbx/sbx-core-als';
+const { SbxApp } = require('@sbx/sbx-archetype-api-default');
 
 export class Resilix {
   private readonly metricsObserver: ResilixMetricsObserver;
@@ -20,6 +21,10 @@ export class Resilix {
 
   constructor() {
     this.metricsObserver = new ResilixMetricsObserver();
+
+    if (SbxApp.getInstance().sbxcore) {
+      this.logger.setExecutionContext(SbxApp.getInstance().sbxcore.config.getExecutionContext());
+    }
   }
 
   setExecutionContextServiceEntity(serviceEntity: LogEntryAsurionService) {

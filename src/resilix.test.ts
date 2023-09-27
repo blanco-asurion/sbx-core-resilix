@@ -49,6 +49,9 @@ describe('Tests', () => {
 
   test('Test 3', async () => {
     const resilix: Resilix = new Resilix();
+    resilix.setExecutionContextServiceEntity({
+      appVersion: '1.9.9'
+    });
     resilix.injectLogger(console);
 
     const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });

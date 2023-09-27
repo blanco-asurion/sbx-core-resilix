@@ -1,4 +1,5 @@
 import {
+  LogEntryAsurionService,
   LogEntryBase,
   LogEntryError,
   LogEntryExecutionInfo,
@@ -93,7 +94,7 @@ export class LoggerThreaded {
     this.maskLogMessage = maskJson(maskFields);
   }
 
-  setExecutionContext(executionContext: LogEntryServiceEntity) {
+  setExecutionContext(executionContext: LogEntryAsurionService) {
     if (executionContext === undefined) return;
     this.logger.defaultMeta = {
       ...this.logger.defaultMeta,
@@ -112,7 +113,7 @@ export class LoggerThreaded {
         container_name: `sbx-${executionContext.subssytem}-${executionContext.capability}-${executionContext.resource}`,
         namespace_name: `${process.env.NODE_ENV}`,
         sbxloggerversion: '5.0',
-        appVersion: packagejson.version
+        appVersion: executionContext?.appVersion || packagejson.version
       }
     };
   }
