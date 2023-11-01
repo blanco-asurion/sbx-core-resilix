@@ -1,3 +1,4 @@
+import { ResilixContext } from './resilix-context';
 import { ResilixJobEntity, resilixExecution } from './resilix-to-execute';
 
 describe('Test TO-EXECUTE', () => {
@@ -20,7 +21,9 @@ describe('Test TO-EXECUTE', () => {
     }
 
     @resilixExecution('hola')
-    async method_1(test: TestRequest): Promise<any> {  
+    async method_1(test: TestRequest, job?: ResilixContext): Promise<any> {  
+      console.log('method_1');
+      console.log(job);
       return 'OK';
     }
   }
@@ -29,7 +32,6 @@ describe('Test TO-EXECUTE', () => {
     const t = new TestClass();
     const req = new TestRequest();
     const result = await t.method_1(req);
-
     expect(result).toBe('OK');
   });
 });
