@@ -1,12 +1,14 @@
+import { LogEntryBase } from '.';
 import { LogEntryInfo } from './log-entry-info';
 import { LogEntryServiceEntity } from './log-entry-service-entity';
 
-export class LogEntryJobProcessingInfo implements LogEntryInfo {
+export class LogEntryJobProcessingInfo extends LogEntryBase implements LogEntryInfo {
   public readonly kpi?: boolean;
 
   constructor(
     public readonly message: string,
     public readonly jobProcessingResult: string = 'ERROR',
+    public readonly keys: { [key: string]: string } = {},
     public readonly identity?: string,
     public readonly sender?: string,
     public readonly scope?: string,
@@ -20,10 +22,12 @@ export class LogEntryJobProcessingInfo implements LogEntryInfo {
     public readonly sbxloggerversion?: string,
     public readonly appVersion?: string,
     public readonly system?: string,
-    public readonly subssytem?: string,
+    public readonly subsystem?: string,
     public readonly capability?: string,
     public readonly resource?: string
   ) {
+    super(message, keys);
+
     this.kpi = true;
   }
 }

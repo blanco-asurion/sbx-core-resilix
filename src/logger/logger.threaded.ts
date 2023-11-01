@@ -110,7 +110,7 @@ export class LoggerThreaded {
             ])
           )
         ),
-        container_name: `sbx-${executionContext.subssytem}-${executionContext.capability}-${executionContext.resource}`,
+        container_name: `sbx-${executionContext.subsystem}-${executionContext.capability}-${executionContext.resource}`,
         namespace_name: `${process.env.NODE_ENV}`,
         sbxloggerversion: '5.0',
         appVersion: executionContext?.appVersion || packagejson.version

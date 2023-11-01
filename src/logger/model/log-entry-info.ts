@@ -1,6 +1,3 @@
-import { LogEntryAsurionService, LogEntryBase, LogEntryServiceEntity } from '.';
+import { LogEntryAsurionService } from '.';
 
-export interface LogEntryInfo
-  extends LogEntryBase,
-    LogEntryAsurionService,
-    LogEntryServiceEntity {}
+export interface LogEntryInfo extends LogEntryAsurionService { }

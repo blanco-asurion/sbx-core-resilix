@@ -1,3 +1,4 @@
+import { als } from '@sbx/sbx-core-als';
 import { ResilixMetricsObserver } from '.';
 import {
   LogEntryAsurionService,
@@ -12,7 +13,6 @@ import { ResilixContext } from './resilix-context';
 import { ResilixExecutable } from './resilix-executable';
 import { ResilixFallback } from './resilix-fallback';
 import { ResilixJob } from './resilix-job';
-import { als } from '@sbx/sbx-core-als';
 const { SbxApp } = require('@sbx/sbx-archetype-api-default');
 
 export class Resilix {
@@ -45,7 +45,6 @@ export class Resilix {
         const context: any = als.getStore();
         context.set('transactionid', job.getUuid());
         context.set('identity', job.getId());
-        context.set('scope', job.getKey());
       }
 
       job.setContext(new ResilixContext(LoggerThreaded.getInstance()));
@@ -60,30 +59,19 @@ export class Resilix {
         correlationid: '',
         urlpath: ''
       });
-      this.logger.info(
-        new LogEntryJobProcessingStart(
-          `Resilix.execute():start retries: ${job.getRetries()}`
-        )
-      );
+      this.logger.info(new LogEntryJobProcessingStart(`Resilix.execute():start retries: ${job.getRetries()}`, job.getKeys()));
       try {
         const result = await this.metricsObserver.execute(job, executable);
-        this.logger.info(
-          new LogEntryJobProcessingSuccess('Resilix.execute():success')
-        );
+        this.logger.info(new LogEntryJobProcessingSuccess('Resilix.execute():success', job.getKeys()));
         job.setResult(result);
       } catch (err: any) {
         if (job.isRetriable()) {
           await this.execute(job, executable, fallback);
         }
-
-        this.logger.info(
-          new LogEntryJobProcessingError('Resilix.execute():error', err)
-        );
+        this.logger.info(new LogEntryJobProcessingError('Resilix.execute():error', err, job.getKeys()));
         job.setResult('ERROR');
         if (fallback !== undefined) {
-          this.logger.info(
-            new LogEntryJobProcessingStart('Resilix.execute():fallback:start')
-          );
+          this.logger.info(new LogEntryJobProcessingStart('Resilix.execute():fallback:start', job.getKeys()));
           try {
             await fallback(job);
             this.logger.info(
@@ -92,21 +80,14 @@ export class Resilix {
               )
             );
           } catch (err: any) {
-            this.logger.info(
-              new LogEntryJobProcessingError(
-                'Resilix.execute():fallback:error',
-                err
-              )
-            );
+            this.logger.info(new LogEntryJobProcessingError('Resilix.execute():fallback:error', err, job.getKeys()));
             job.setResult('ERROR');
           } finally {
-            this.logger.info(
-              new LogEntryJobProcessingEnd('Resilix.execute():fallback:end')
-            );
+            this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():fallback:end', job.getKeys()));
           }
         }
       } finally {
-        this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():end'));
+        this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():end', job.getKeys()));
       }
     });
   }

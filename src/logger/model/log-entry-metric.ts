@@ -1,7 +1,6 @@
-import { LogEntryInfo, LogEntryServiceEntity } from '.';
+import { LogEntryBase, LogEntryInfo, LogEntryServiceEntity } from '.';
 
-export class LogEntryMetric implements LogEntryInfo {
-  public readonly message: string;
+export class LogEntryMetric extends LogEntryBase implements LogEntryInfo {
   public readonly kpi: boolean;
   public readonly performance: boolean;
 
@@ -9,6 +8,7 @@ export class LogEntryMetric implements LogEntryInfo {
     public readonly id: string,
     public readonly startTime: number,
     public readonly duration: number,
+    public readonly keys: { [key: string]: string } = {},
     public readonly identity?: string,
     public readonly transactionid?: string,
     public readonly sender?: string,
@@ -22,11 +22,12 @@ export class LogEntryMetric implements LogEntryInfo {
     public readonly sbxloggerversion?: string,
     public readonly appVersion?: string,
     public readonly system?: string,
-    public readonly subssytem?: string,
+    public readonly subsystem?: string,
     public readonly capability?: string,
     public readonly resource?: string
   ) {
-    this.message = `Performance ${id} took ${(duration / 1000).toFixed(2)}s`;
+    super(`Performance ${id} took ${(duration / 1000).toFixed(2)}s`, keys);
+
     this.kpi = true;
     this.performance = true;
   }

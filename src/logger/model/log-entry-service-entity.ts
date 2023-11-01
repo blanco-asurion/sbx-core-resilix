@@ -1,6 +1,6 @@
 export interface LogEntryServiceEntity {
   system?: string;
-  subssytem?: string;
+  subsystem?: string;
   capability?: string;
   resource?: string;
 }

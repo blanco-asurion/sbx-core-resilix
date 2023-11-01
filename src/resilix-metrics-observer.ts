@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { performance, PerformanceObserver } from 'perf_hooks';
-import { LogEntryMetric, LoggerThreaded } from './logger';
+import { LogEntryInfo, LogEntryMetric, LoggerThreaded } from './logger';
 import { ResilixExecutable } from './resilix-executable';
 import { ResilixJob } from './resilix-job';
 
@@ -17,8 +17,9 @@ export class ResilixMetricsObserver {
           _.get(job, 'id', ''),
           entry.startTime,
           entry.duration,
-          _.get(job, 'uuid', ''),
-          _.get(job, 'uuid', '')
+          _.get(job, 'keys', {}),
+          _.get(job, 'identity', ''),
+          _.get(job, 'transactionid', '')
         );
         LoggerThreaded.getInstance().info(logEntry);
       });

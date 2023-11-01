@@ -10,3 +10,4 @@ export * from './log-entry-job-processing-start';
 export * from './log-entry-job-processing-end';
 export * from './log-entry-job-processing-success';
 export * from './log-entry-call-info';
+export * from './log-entry-with-keys';

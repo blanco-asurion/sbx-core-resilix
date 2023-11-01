@@ -3,15 +3,16 @@ import { ResilixContext } from './resilix-context';
 
 export class ResilixJob<dataType = any> {
   private result: string = 'ERROR';
-  private maxRetries: number = 3;
   private retries: number = 0;
   private context?: ResilixContext;
 
   constructor(
     private readonly uuid: string = Uuid(),
     private readonly id: string,
-    private readonly key: string,
+    private readonly keys: { [key: string]: string },
     private readonly data: dataType,
+    private maxRetries: number = 3,
+    private waitDuration: number = 500,    
     private logInfo: any = {}
   ) {
     Object.defineProperty(this, 'uuid', {
@@ -29,7 +30,7 @@ export class ResilixJob<dataType = any> {
       writable: true
     });
 
-    Object.defineProperty(this, 'key', {
+    Object.defineProperty(this, 'keys', {
       enumerable: true,
       writable: false
     });
@@ -48,8 +49,12 @@ export class ResilixJob<dataType = any> {
     return this.uuid;
   }
 
-  getKey() {
-    return this.key;
+  getKeys(): { [key: string]: string } {
+    return this.keys;
+  }
+
+  getWaitDuration() {
+    return this.waitDuration;
   }
 
   appendLogInfo(info) {
@@ -82,6 +87,10 @@ export class ResilixJob<dataType = any> {
 
   getRetries() {
     return this.retries;
+  }
+
+  getMaxRetries() {
+    return this.maxRetries;
   }
 
   increaseRetries() {
