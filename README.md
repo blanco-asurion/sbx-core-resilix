@@ -9,7 +9,8 @@
 2. [Usage](#usage)
 3. [API Reference](#api-reference)
 4. [Examples](#examples)
-5. [Logging](#logging)
+5. [Decorator](#decorator)
+6. [Logging](#logging)
 
 ## Introduction
 
@@ -70,6 +71,77 @@ await resilix.execute(job, (job: ResilixJob): Promise<any> => {
   });
 }, (job: ResilixJob): Promise<any> => { return Promise.resolve('FALLBACK OK') });
 ```
+
+## Decorator
+
+The resilixExecution function is a TypeScript decorator that provides a retry mechanism for methods and logging. It utilizes the Resilix class to handle retry logic.
+
+### Signature
+
+```typescript
+function resilixExecution(
+  logMessage?: string,
+  maxRetries?: number,
+  waitDuration?: number
+): MethodDecorator;
+```
+
+#### Parameters
+
+- logMessage (optional): A custom log message to be displayed during retries and error handling.
+- maxRetries (optional): The maximum number of retry attempts.
+- waitDuration (optional): The wait duration (in milliseconds) before each retry attempt.
+
+```typescript
+class ExampleClass {
+  @resilixExecution('Custom log message', 3, 1000)
+  async exampleMethod(...args: any): Promise<any> {
+    // Method logic that might fail and require retries
+  }
+}
+```
+
+### Resilix Worker
+
+The interface `ResilixWorker` can be implemented by the class that uses the `resilixExecution` decorator. This will allows the class to access the current `RexilixJob` object, use custom logging funcionality. Also It enables to determine which properties or keys will be along every log entry for better tracking. 
+
+```typescript
+import { ResilixJob } from "./resilix-job";
+import { resilixExecution } from "./resilixExecution";
+
+class MyClass implements ResilixWorker {
+  private job: ResilixJob; // Private member to hold the ResilixJob object
+
+  // Implementing the setJob method from ResilixWorker interface
+  setJob(job: ResilixJob): void {
+    this.job = job;
+  }
+
+  // Implementing the getJob method from ResilixWorker interface
+  getJob(): ResilixJob {
+    return this.job;
+  }
+
+  // Implementing the parseKeys method from ResilixWorker interface
+  parseKeys(source: object): { [key: string]: string } {
+    // Logic to parse keys from the source object
+    // Return an object with string keys and string values
+    return {
+      key1: source.key1.toString(),
+      key2: source.key2.toString(),
+      // ...other keys
+    };
+  }
+
+  // Applying resilixExecution decorator to the method
+  @resilixExecution('Custom log message', 3, 1000)
+  async exampleMethod(...args: any): Promise<any> {
+    // Method logic that might fail and require retries
+  }
+}
+```
+
+In this example, MyClass implements the ResilixWorker interface. The exampleMethod in MyClass is decorated with the resilixExecution decorator, allowing it to utilize the ResilixJob object and custom logging functionality. Additionally, the parseKeys method provides the logic to parse keys from the source object for better tracking.
 
 ## Logging
 
