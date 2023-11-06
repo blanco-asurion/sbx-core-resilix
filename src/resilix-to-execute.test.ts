@@ -2,11 +2,10 @@ import { ResilixContext } from './resilix-context';
 import { ResilixJobEntity, resilixExecution } from './resilix-to-execute';
 
 describe('Test TO-EXECUTE', () => {
-
   jest.setTimeout(30000);
 
   class TestRequest implements ResilixJobEntity {
-    keys: { [key: string]: string; } = {};
+    keys: { [key: string]: string } = {};
 
     constructor() {
       this.keys['SERVICE_JOB_ID'] = '123';
@@ -21,7 +20,7 @@ describe('Test TO-EXECUTE', () => {
     }
 
     @resilixExecution('hola')
-    async method_1(test: TestRequest, job?: ResilixContext): Promise<any> {  
+    async method_1(test: TestRequest, job?: ResilixContext): Promise<any> {
       console.log('method_1');
       console.log(job);
       return 'OK';
@@ -35,5 +34,3 @@ describe('Test TO-EXECUTE', () => {
     expect(result).toBe('OK');
   });
 });
-
-

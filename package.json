@@ -1,10 +1,10 @@
 {
-  "name": "sbx-core-resilix",
-  "version": "1.0.0",
+  "name": "@sbx/sbx-core-resilix",
+  "version": "1.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsup ./src/index.ts",
     "start": "npm run build -- --watch",
     "test": "NEW_RELIC_APP_NAME=test NEWRELIC_LICENSE_KEY=3d80e4f1-3d24-4933-9701-8e6679d1b117 NODE_ENV=dev jest",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"

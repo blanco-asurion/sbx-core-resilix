@@ -2,13 +2,16 @@ import { LogEntryBase } from '.';
 import { LogEntryInfo } from './log-entry-info';
 import { LogEntryServiceEntity } from './log-entry-service-entity';
 
-export class LogEntryJobProcessingInfo extends LogEntryBase implements LogEntryInfo {
+export class LogEntryJobProcessingInfo
+  extends LogEntryBase
+  implements LogEntryInfo
+{
   public readonly kpi?: boolean;
 
   constructor(
     public readonly message: string,
-    public readonly jobProcessingResult: string = 'ERROR',
-    public readonly keys: { [key: string]: string } = {},
+    public readonly jobProcessingResult?: string,
+    keys?: { [key: string]: string },
     public readonly identity?: string,
     public readonly sender?: string,
     public readonly scope?: string,

@@ -48,7 +48,11 @@ export class LoggerThreaded {
     return LoggerThreaded.instance;
   }
 
-  constructor(private readonly core) {
+  constructor(
+    core: any = {}
+  ) {
+    if (core === undefined) throw new Error('core is undefined');
+
     let loglevel = LoggerThreaded.loglevels.info;
     if (
       process.env.loglevel &&
@@ -57,7 +61,7 @@ export class LoggerThreaded {
       loglevel = process.env.loglevel;
     }
 
-    let maskFields = [];
+    let maskFields: any[] = [];
     /* ssm parameter value of /sbx/{region}/{env}/config/global/standardSecureFields */
     if (
       core.config.get('standardSecureFields') &&
@@ -87,10 +91,12 @@ export class LoggerThreaded {
 
     this.setExecutionContext(core.config.getExecutionContext());
 
-    this.info({ message: `LoggerThreaded started` });
+    this.info({
+      message: `LoggerThreaded started`
+    });
   }
 
-  setJsonMaskFields(maskFields) {
+  setJsonMaskFields(maskFields: any) {
     this.maskLogMessage = maskJson(maskFields);
   }
 
@@ -127,7 +133,7 @@ export class LoggerThreaded {
     };
   }
 
-  appendDefaultMeta(key, value) {
+  appendDefaultMeta(key: any, value: any) {
     this.logger.defaultMeta = {
       ...this.logger.defaultMeta,
       [key]: value
@@ -154,12 +160,12 @@ export class LoggerThreaded {
     return this.logger.verbose(this.safeMask(this.addContext(message)));
   }
 
-  safeMask(item, level = 2) {
+  safeMask(item: any, level = 2) {
     if (_.isObject(item)) {
       if (level < 1) return this.safeStringify(item);
       return _.reduce(
         item,
-        (result, value, key) => {
+        (result: any, value: any, key: any) => {
           result[key] = _.isString(value)
             ? this.maskLogMessage(value)
             : this.safeMask(value, level - 1);
@@ -171,7 +177,7 @@ export class LoggerThreaded {
     return this.maskLogMessage(item);
   }
 
-  safeStringify(item) {
+  safeStringify(item: any) {
     // Note: cache should not be re-used by repeated calls to JSON.stringify.
     var cache: any[] = [];
     const res = JSON.stringify(item, (key, value) => {
@@ -188,7 +194,7 @@ export class LoggerThreaded {
     return res;
   }
 
-  addContext(message) {
+  addContext(message: any) {
     try {
       const info: LogEntryExecutionInfo = {};
 

@@ -23,7 +23,9 @@ export class Resilix {
     this.metricsObserver = new ResilixMetricsObserver();
 
     if (SbxApp.getInstance().sbxcore) {
-      this.logger.setExecutionContext(SbxApp.getInstance().sbxcore.config.getExecutionContext());
+      this.logger.setExecutionContext(
+        SbxApp.getInstance().sbxcore.config.getExecutionContext()
+      );
     }
   }
 
@@ -59,19 +61,40 @@ export class Resilix {
         correlationid: '',
         urlpath: ''
       });
-      this.logger.info(new LogEntryJobProcessingStart(`Resilix.execute():start retries: ${job.getRetries()}`, job.getKeys()));
+      this.logger.info(
+        new LogEntryJobProcessingStart(
+          `Resilix.execute():start retries: ${job.getRetries()}`,
+          job.getKeys()
+        )
+      );
       try {
         const result = await this.metricsObserver.execute(job, executable);
-        this.logger.info(new LogEntryJobProcessingSuccess('Resilix.execute():success', job.getKeys()));
+        this.logger.info(
+          new LogEntryJobProcessingSuccess(
+            'Resilix.execute():success',
+            job.getKeys()
+          )
+        );
         job.setResult(result);
       } catch (err: any) {
         if (job.isRetriable()) {
           await this.execute(job, executable, fallback);
         }
-        this.logger.info(new LogEntryJobProcessingError('Resilix.execute():error', err, job.getKeys()));
+        this.logger.info(
+          new LogEntryJobProcessingError(
+            'Resilix.execute():error',
+            err,
+            job.getKeys()
+          )
+        );
         job.setResult('ERROR');
         if (fallback !== undefined) {
-          this.logger.info(new LogEntryJobProcessingStart('Resilix.execute():fallback:start', job.getKeys()));
+          this.logger.info(
+            new LogEntryJobProcessingStart(
+              'Resilix.execute():fallback:start',
+              job.getKeys()
+            )
+          );
           try {
             await fallback(job);
             this.logger.info(
@@ -80,14 +103,27 @@ export class Resilix {
               )
             );
           } catch (err: any) {
-            this.logger.info(new LogEntryJobProcessingError('Resilix.execute():fallback:error', err, job.getKeys()));
+            this.logger.info(
+              new LogEntryJobProcessingError(
+                'Resilix.execute():fallback:error',
+                err,
+                job.getKeys()
+              )
+            );
             job.setResult('ERROR');
           } finally {
-            this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():fallback:end', job.getKeys()));
+            this.logger.info(
+              new LogEntryJobProcessingEnd(
+                'Resilix.execute():fallback:end',
+                job.getKeys()
+              )
+            );
           }
         }
       } finally {
-        this.logger.info(new LogEntryJobProcessingEnd('Resilix.execute():end', job.getKeys()));
+        this.logger.info(
+          new LogEntryJobProcessingEnd('Resilix.execute():end', job.getKeys())
+        );
       }
     });
   }

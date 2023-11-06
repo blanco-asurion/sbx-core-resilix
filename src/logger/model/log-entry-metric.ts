@@ -8,7 +8,7 @@ export class LogEntryMetric extends LogEntryBase implements LogEntryInfo {
     public readonly id: string,
     public readonly startTime: number,
     public readonly duration: number,
-    public readonly keys: { [key: string]: string } = {},
+    keys: { [key: string]: string } = {},
     public readonly identity?: string,
     public readonly transactionid?: string,
     public readonly sender?: string,

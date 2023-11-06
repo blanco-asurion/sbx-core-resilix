@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { performance, PerformanceObserver } from 'perf_hooks';
-import { LogEntryInfo, LogEntryMetric, LoggerThreaded } from './logger';
+import { LogEntryMetric, LoggerThreaded } from './logger';
 import { ResilixExecutable } from './resilix-executable';
 import { ResilixJob } from './resilix-job';
 

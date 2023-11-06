@@ -12,7 +12,7 @@ export class ResilixJob<dataType = any> {
     private readonly keys: { [key: string]: string },
     private readonly data: dataType,
     private maxRetries: number = 3,
-    private waitDuration: number = 500,    
+    private waitDuration: number = 500,
     private logInfo: any = {}
   ) {
     Object.defineProperty(this, 'uuid', {
@@ -57,7 +57,7 @@ export class ResilixJob<dataType = any> {
     return this.waitDuration;
   }
 
-  appendLogInfo(info) {
+  appendLogInfo(info: any) {
     this.logInfo = Object.assign({}, this.logInfo, info);
   }
 

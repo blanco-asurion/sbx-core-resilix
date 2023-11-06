@@ -4,11 +4,11 @@
 export class LoggerThreadedDecorator {
   constructor(private logger: any) {}
 
-  logInfo(message, messageobj) {
+  logInfo(message: string, messageobj: any) {
     this.logger.info({ message, messageobj });
   }
 
-  logError(message, messageobj) {
+  logError(message: string, messageobj: any) {
     this.logger.error({ message, messageobj });
   }
 }
