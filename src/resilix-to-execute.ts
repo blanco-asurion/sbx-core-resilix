@@ -21,11 +21,12 @@ export function resilixExecution(
   ) {
     const original = descriptor.value;
     descriptor.value = async function (...args: any): Promise<any> {
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         let keys = args[0]?.keys || {};
         if ('parseKeys' in this) {
           keys = (this as ResilixWorker).parseKeys(this);
         }
+
         const job = new ResilixJob(
           uuid(),
           args[0]?.id || uuid(),
@@ -34,33 +35,19 @@ export function resilixExecution(
           maxRetries,
           waitDuration
         );
-        execute(resilix, this, job, resolve, reject, original, args);
+
+        if ('setJob' in this) {
+          (this as ResilixWorker).setJob(job);
+        }
+
+        await resilix.execute(job, (job: ResilixJob) => original.call(this, ...args));
+
+        if (job.getResult() === 'ERROR') {
+          return reject(job.getLastError());
+        }
+
+        return resolve(job.getOutputResult());
       });
     };
   };
-}
-
-function execute(
-  resilix: Resilix,
-  self: any,
-  job: ResilixJob,
-  resolve: (arg: any) => void,
-  reject: (arg: any) => void,
-  original: any,
-  ...args: any
-) {
-  setTimeout(() => {
-    resilix.execute(job, async (job: ResilixJob) => {
-      try {
-        const params = [...[self], ...args];
-        if ('setJob' in self) {
-          (self as ResilixWorker).setJob(job);
-        }
-        const result = await original.apply(...params);
-        resolve(result);
-      } catch (err: any) {
-        reject(err);
-      }
-    });
-  }, job.getWaitDuration());
 }

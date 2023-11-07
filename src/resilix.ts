@@ -8,7 +8,7 @@ import {
   LogEntryJobProcessingSuccess,
   createLoggerDecorator
 } from './logger';
-import { LoggerThreaded } from './logger/logger.threaded';
+import { LoggerThreaded } from './logger/logger-threaded';
 import { ResilixContext } from './resilix-context';
 import { ResilixExecutable } from './resilix-executable';
 import { ResilixFallback } from './resilix-fallback';
@@ -68,25 +68,28 @@ export class Resilix {
         )
       );
       try {
-        const result = await this.metricsObserver.execute(job, executable);
+        const result = await this.executeTimer(job, executable, job.getWaitDuration());
         this.logger.info(
           new LogEntryJobProcessingSuccess(
             'Resilix.execute():success',
             job.getKeys()
           )
         );
-        job.setResult(result);
+        job.setResult('SUCCESS');
+        job.setOutputResult(result);
+        return result;
       } catch (err: any) {
         if (job.isRetriable()) {
           await this.execute(job, executable, fallback);
         }
-        this.logger.info(
+        this.logger.error(
           new LogEntryJobProcessingError(
             'Resilix.execute():error',
             err,
             job.getKeys()
           )
         );
+        job.setLastError(err);
         job.setResult('ERROR');
         if (fallback !== undefined) {
           this.logger.info(
@@ -120,6 +123,7 @@ export class Resilix {
             );
           }
         }
+        return {};
       } finally {
         this.logger.info(
           new LogEntryJobProcessingEnd('Resilix.execute():end', job.getKeys())
@@ -128,7 +132,15 @@ export class Resilix {
     });
   }
 
-  injectLogger(core: any) {
-    core['logger'] = createLoggerDecorator();
+  async executeTimer(job: ResilixJob, executable: ResilixExecutable, waitDuration: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          resolve(await this.metricsObserver.execute(job, executable));
+        } catch (err) {
+          reject(err);
+        }
+      }, waitDuration);
+    });
   }
 }

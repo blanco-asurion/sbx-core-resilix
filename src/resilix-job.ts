@@ -5,6 +5,8 @@ export class ResilixJob<dataType = any> {
   private result: string = 'ERROR';
   private retries: number = 0;
   private context?: ResilixContext;
+  private lastError?: any;
+  private outputResult?: any;
 
   constructor(
     private readonly uuid: string = Uuid(),
@@ -69,6 +71,14 @@ export class ResilixJob<dataType = any> {
     return this.result;
   }
 
+  setOutputResult(outputResult: any) {
+    this.outputResult = outputResult;
+  }
+
+  getOutputResult() {
+    return this.outputResult;
+  }
+
   getLogInfo() {
     return this.logInfo;
   }
@@ -103,5 +113,13 @@ export class ResilixJob<dataType = any> {
 
   setMaxRetries(maxRetries: number) {
     this.maxRetries = maxRetries;
+  }
+
+  setLastError(lastError: any) {
+    this.lastError = lastError;
+  }
+
+  getLastError() {
+    return this.lastError;
   }
 }

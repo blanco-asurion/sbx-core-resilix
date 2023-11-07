@@ -27,8 +27,8 @@ export class ResilixMetricsObserver {
     this.obs.observe({ entryTypes: ['function'], buffered: false });
   }
 
-  async execute(job: ResilixJob, handler: ResilixExecutable) {
+  async execute(job: ResilixJob, handler: ResilixExecutable): Promise<any> {
     const perfWrapper = performance.timerify(handler);
-    return perfWrapper(job);
+    return await perfWrapper(job);
   }
 }

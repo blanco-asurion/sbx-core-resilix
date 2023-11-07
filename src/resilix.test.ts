@@ -12,12 +12,12 @@ describe('Tests', () => {
 
     resilix.setExecutionContextServiceEntity({
       system: 'system-test',
-      subssytem: 'subsystem-test',
+      subsystem: 'subsystem-test',
       capability: 'capability-test',
       resource: 'resource-test'
     });
 
-    const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
+    const job = new ResilixJob(uuid(), 'test-id', { key1: 'test-key' }, { test: 'test' });
 
     await resilix.execute(job, (job: ResilixJob): Promise<any> => {
       return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ describe('Tests', () => {
     const resilix: Resilix = new Resilix();
     resilix.injectLogger(console);
 
-    const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
+    const job = new ResilixJob(uuid(), 'test-id', { key1: 'test-key' }, { test: 'test' });
 
     await resilix.execute(job, (job: ResilixJob): Promise<any> => {
       return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ describe('Tests', () => {
     });
     resilix.injectLogger(console);
 
-    const job = new ResilixJob(uuid(), 'test-id', 'test-key', { test: 'test' });
+    const job = new ResilixJob(uuid(), 'test-id', { key1: 'test-key' }, { test: 'test' });
     job.setMaxRetries(1);
 
     await resilix.execute(
