@@ -5,8 +5,7 @@ import {
   LogEntryJobProcessingEnd,
   LogEntryJobProcessingError,
   LogEntryJobProcessingStart,
-  LogEntryJobProcessingSuccess,
-  createLoggerDecorator
+  LogEntryJobProcessingSuccess
 } from './logger';
 import { LoggerThreaded } from './logger/logger-threaded';
 import { ResilixContext } from './resilix-context';
