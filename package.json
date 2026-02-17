@@ -26,7 +26,7 @@
     "@newrelic/winston-enricher": "^4.0.1",
     "@sbx/sbx-archetype-api-default": "^5.1.3",
     "@types/lodash": "^4.14.197",
-    "express": "^4.18.2",
+    "express": "^4.22.0",
     "mask-json": "^1.0.3",
     "newrelic": "^11.0.0",
     "ts-node": "^10.9.1",
